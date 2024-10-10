@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="task-section">
+    <h2>Your Tasks</h2>
+    <a class="btn btn-submit" href="{{ url_for('add_task') }}">
+        <i class="fas fa-plus-circle"></i> Add New Task
+    </a>
+
+    {% if tasks %}
+        <ul class="task-list">
+            {% for task in tasks %}
+            <li class="task-item">
+                <div class="task-details">
+                    <h3>{{ task.title }}</h3>
+                    <p>{{ task.description }}</p>
+                    <span class="category">Category: {{ task.category }}</span>
+                    <span
+                        class="status {% if task.status == 'Completed' %}completed{% else %}pending{% endif %}"
+                    >
+                        Status: {{ task.status }}
+                    </span>
+                </div>
+                <div class="task-actions">
+                    {% if task.status == 'Pending' %}
+                    <a
+                        href="{{ url_for('mark_completed', task_id=loop.index0) }}"
+                        class="btn btn-complete"
+                    >
+                        <i class="fas fa-check"></i> Mark Completed
+                    </a>
+                    {% endif %}
+                    <a
+                        href="{{ url_for('delete_task', task_id=loop.index0) }}"
+                        class="btn btn-delete"
+                    >
+                        <i class="fas fa-trash-alt"></i> Delete
+                    </a>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p class="no-tasks">No tasks available. Start by adding a new task!</p>
+    {% endif %}
+</section>
+{% endblock %}
